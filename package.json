@@ -1,0 +1,34 @@
+{
+  "name": "use-fused-state",
+  "version": "1.0.0",
+  "description": "Custom React Hook that handles prop and state logic",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "build": "tsc --build tsconfig.build.json",
+    "prepublish": "npm run build"
+  },
+  "author": "jiapeiyao",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.11.4",
+    "@storybook/addon-actions": "^6.0.20",
+    "@storybook/addon-essentials": "^6.0.20",
+    "@storybook/addon-links": "^6.0.20",
+    "@storybook/react": "^6.0.20",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "@umijs/fabric": "^2.2.2",
+    "babel-loader": "^8.1.0",
+    "eslint": "^7.9.0",
+    "react-is": "^16.13.1",
+    "storybook": "^6.0.13",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "react": "16.9.0",
+    "react-dom": "16.9.0"
+  }
+}
