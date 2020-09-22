@@ -10,8 +10,16 @@
     "build": "tsc --build tsconfig.build.json",
     "prepublish": "npm run build"
   },
-  "author": "jiapeiyao",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jiapeiyao/use-fused-state.git"
+  },
+  "author": "Jiapeiyao",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jiapeiyao/use-fused-state/issues"
+  },
+  "homepage": "https://github.com/Jiapeiyao/use-fused-state#readme",
   "devDependencies": {
     "@babel/core": "^7.11.4",
     "@storybook/addon-actions": "^6.0.20",
@@ -28,7 +36,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "react": "16.9.0",
-    "react-dom": "16.9.0"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   }
 }
