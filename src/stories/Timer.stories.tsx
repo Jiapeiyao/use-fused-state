@@ -13,7 +13,10 @@ export function NoPropsTimer() {
 }
 
 export function DefaultPropTimer() {
-  return <Timer defaultValue={100} />;
+  return  <React.Fragment>
+      <span>A timer starts with 100: </span>
+      <Timer defaultValue={100} />
+  </React.Fragment>;
 }
 
 export function NoPropAndGetStateFromTimer() {
@@ -21,7 +24,7 @@ export function NoPropAndGetStateFromTimer() {
   return (
     <React.Fragment>
       <Timer onChange={setValue} />
-      <div>value: {value === null ? 'null' : value}</div>
+      <div>Value set by the timer: {value === null ? 'null' : value}</div>
     </React.Fragment>
   );
 }
@@ -30,6 +33,7 @@ export function HasPropTimer() {
   const [value, setValue] = React.useState(0);
   return (
     <React.Fragment>
+      <span>The timer's value is completely controlled by: </span>
       <button type="button" onClick={() => setValue(value + 1)}>+</button>
       <button type="button" onClick={() => setValue(value - 1)}>-</button>
       <Timer value={value} />
@@ -41,9 +45,10 @@ export function SyncPropStateTimer() {
   const [value, setValue] = React.useState<number>(0);
   return (
     <React.Fragment>
+      <span>Set timer's value from outside: </span>
       <button type="button" onClick={() => setValue(0)}>reset</button>
-      <Timer value={value} onChange={setValue} />
-      <div>value: {value === null ? 'null' : value}</div>
+      <Timer defaultValue={100} value={value} onChange={setValue} />
+      <div>Value set by the timer: {value === null ? 'null' : value}</div>
     </React.Fragment>
   );
 }

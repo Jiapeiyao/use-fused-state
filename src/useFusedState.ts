@@ -1,9 +1,6 @@
 import React from 'react';
 
 interface Option<T> {
-  /** current value in `props` */
-  prop?: T;
-
   /** default value in `props` */
   defaultProp?: T;
 
@@ -17,13 +14,15 @@ interface Option<T> {
   compare?: (state0: T | null, state1: T) => boolean;
 }
 
-export default function useFusedState<T>({
-  prop,
-  defaultProp,
-  initialState,
-  onInnerStateChange,
-  compare = defaultCompare,
-}: Option<T>): [T | null, (newStateOrCallback: T | ((prevState: T | null) => T)) => void] {
+export default function useFusedState<T>(
+  prop: T | undefined,
+  {
+    defaultProp,
+    initialState,
+    onInnerStateChange,
+    compare = defaultCompare,
+  }: Option<T> = { compare: defaultCompare }
+): [T | null, (newStateOrCallback: T | ((prevState: T | null) => T)) => void] {
   const update = useUpdate();
   const fusedStateRef = React.useRef<T | null>(defaultProp ?? initialState ?? null);
   fusedStateRef.current = prop === undefined ? fusedStateRef.current : prop;

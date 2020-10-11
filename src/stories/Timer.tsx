@@ -9,8 +9,7 @@ interface TimerProps {
 
 export default function Timer(props: TimerProps) {
   const { defaultValue, value, onChange } = props;
-  const [time, onTimeChange] = useFusedState<number>({
-    prop: value,
+  const [time, onTimeChange] = useFusedState<number>(value, {
     defaultProp: defaultValue,
     onInnerStateChange: onChange,
     initialState: 0,
@@ -19,7 +18,7 @@ export default function Timer(props: TimerProps) {
   useClocktick(time ?? 0, onTimeChange);
 
   return (
-    <div>time: {time}</div>
+    <div>(⏰ : {time})</div>
   );
 }
 
