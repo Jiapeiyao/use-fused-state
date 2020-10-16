@@ -1,6 +1,6 @@
 # useFusedState
 
-`useFusedState` is a custom hook that can help handle a React Functional Component props and states changing logic simply.
+`useFusedState` is a custom React Hook that helps handle changing logic of `prop` and `state` simply.
 
 ## Example
 ```javascript
@@ -15,8 +15,7 @@ interface TimerProps {
 
 export default function Timer(props: TimerProps) {
   const { defaultValue, value, onChange } = props;
-  const [time, onTimeChange] = useFusedState<number>({
-    prop: value,
+  const [time, onTimeChange] = useFusedState<number>(value, {
     defaultProp: defaultValue,
     onInnerStateChange: onChange,
     initialState: 0,
@@ -25,7 +24,7 @@ export default function Timer(props: TimerProps) {
   useClocktick(time ?? 0, onTimeChange);
 
   return (
-    <div>time: {time}</div>
+    <div>(⏰ : {time})</div>
   );
 }
 
@@ -43,8 +42,53 @@ function useClocktick(time: number, onTimeChange: (newTime: number) => void) {
 }
 ```
 
-## A basic but frequent question: who should control the 'state'?
-Assume we are developing a `Button`
+## API
+```javascript
+useFusedState<T>(prop: T, option?: Option<T>)
+```
+| Argument | Description | Type | Default |
+|-----|-----|-----|-----|
+| prop | current value from `props` | `T` | |
+| option? | optional setting | `Option<T>` | `{ compare: (a, b) => a === b }` |
+
+### `Option<T>`
+| Property | Description | Type | Default |
+|-----|-----|-----|-----|
+| defaultProp? | default value from `props` | `T` |  |
+| initialState? | initial state if there is no default value from `props` | `T` |  |
+| onInnerStateChange? | change callback which is only triggered by inner state (prop change won't trigger it) | `(newState: T) => void` |  |
+| compare? | custom comparison function other than `===` | `(prevState: T | null, newState: T) => boolean`| `(a, b) => a === b` |
+
+## Rules and Details
+1. Priority: `prop` > `state`
+2. `onInnerStateChange` won't be triggered by change of `prop`
+3.  A custom comparison function is usually required if `T` is a non-primitive type. e.g. `[0, 1] === [0, 1]` is false.
+4. The hook returns a tuple of state and a dispatch function, if you encounter closure problem, you can try using a callback as the argument of the dispatch function.
+    ```javascript
+    const [state, setState] = useFusedState<number>(value, {
+      onInnerStateChange: onChange,
+    });
+
+    // set by callback
+    setState((prevValue: number | null) => calculate(prevValue));
+    ```
+5. If the generic type is function and you want set the state directly, the second argument of the dispatch function should be `false`.
+    ```javascript
+    type FunctionType = () => void;
+
+    const [fn, setFn] = useFusedState<FunctionType>(value, {
+      onInnerStateChange: onChange,
+    });
+
+    // set directly
+    setState(() => fn?.(), false);
+
+    // set by callback
+    setState((oldFn: FunctionType | null) => (() => oldFn?.()));
+    ```
+
+## Why use-fused-state? A basic but frequent problem: who should control the state and how to manage it properly?
+
 ### Senario 1: prop only
 ```javascript
 // web app code
@@ -98,17 +142,3 @@ The TimePicker has been completely controlled by the `value` in `props`.
 const [value, setValue] = React.useState('13:01:02');
 const timePicker = <TimePicker value={value} onValueChange={setValue} />;
 ```
-
-## Props
-| Property | Description | Type | Default |
-|-----|-----|-----|-----|
-| prop | current value from `props` | `T` | |
-| defaultProp | default value from `props` | `T` | |
-| initialState | initial state if there is no default value from `props` | `T` |  |
-| onInnerStateChange | change callback which is only triggered by inner state (prop change won't trigger it) | `(newState: T) => void` |  |
-| compare | custom comparison function other than `===` | `(state0: T | null, state1: T) => boolean`|  |
-
-## Rules and Details
-1. Priority: `prop` > `state`
-2. `onInnerStateChange` won't be triggered when the `prop` changes
-3.  A custom comparison function is usually required if `T` is a non-primitive type. e.g. `[0, 1] === [0, 1]` is false.

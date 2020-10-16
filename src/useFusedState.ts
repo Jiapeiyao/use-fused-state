@@ -11,7 +11,7 @@ interface Option<T> {
   onInnerStateChange?: (newState: T) => void;
 
   /** custom comparison function other than `===` */
-  compare?: (state0: T | null, state1: T) => boolean;
+  compare?: (prevState: T | null, newState: T) => boolean;
 }
 
 export default function useFusedState<T>(
